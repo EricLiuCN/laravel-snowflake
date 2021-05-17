@@ -1,0 +1,28 @@
+{
+    "name": "ericliucn/laravel-snowflake",
+    "description": "分布式Id生成，基于雪花算法的laravel包",
+    "license": "MIT",
+    "authors": [{
+        "name": "EricLiuCN",
+        "email": "937634795@qq.com"
+    }],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ericliucn\\LaravelSnowflake\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ericliucn\\LaravelSnowflake\\Providers\\SnowflakeServiceProvider"
+            ],
+            "aliases": {
+                "Snowflake": "Ericliucn\\LaravelSnowflake\\Facades\\Snowflake"
+            }
+        }
+    }
+}
