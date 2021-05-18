@@ -5,7 +5,7 @@ return array(
 	 * 初始时间戳
 	 * @var number
 	 */
-	'start_time' => strtotime(env("SNOWFLAKE_START_TIME", '2020-07-18 10:00:00')),
+	'start_time' => strtotime(env("SNOWFLAKE_START_TIME", '2021-05-18 10:00:00')),
 	/**
 	 * 数据中心ID 【0~31】
 	 * @var number
@@ -17,6 +17,12 @@ return array(
 	 * @var number
 	 */
 	'machine_id' => env("SNOWFLAKE_MACHINE_ID", 0),
+
+    /**
+     * 是否短ID 【兼容js】
+     * @var number
+     */
+    'short_id' => true,
 
 	/**
 	 * 是否启用redis锁 false使用 文件锁
