@@ -20,6 +20,14 @@ class FileCountServer implements CountServerInterFace
             $lastTimestamp  = (int)fgets($fp);
             $lastSequenceId = (int)fgets($fp);
             fclose($fp);
+        }else{
+            if(mkdir(dirname($lockFileName),0777)){
+                file_put_contents($lockFileName,'');
+            }
+            $fp = fopen($lockFileName, 'r');
+            $lastTimestamp  = (int)fgets($fp);
+            $lastSequenceId = (int)fgets($fp);
+            fclose($fp);
         }
 
         $fp = fopen($lockFileName, 'w');
