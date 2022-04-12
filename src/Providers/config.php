@@ -5,7 +5,7 @@ return array(
 	 * 初始时间戳
 	 * @var number
 	 */
-	'start_time' => strtotime(env("SNOWFLAKE_START_TIME", '2021-05-18 10:00:00')),
+	'start_time' => strtotime(env("SNOWFLAKE_START_TIME", '2022-04-12 00:00:00')),
 	/**
 	 * 数据中心ID 【0~31】
 	 * @var number
@@ -22,22 +22,17 @@ return array(
      * 是否短ID 【兼容js】
      * @var number
      */
-    'short_id' => true,
+    'short_id' => env("SNOWFLAKE_SHORT_ID", false),
 
 	/**
-	 * 是否启用redis锁 false使用 文件锁
+	 * 是否启用Redis锁 false使用 文件锁
 	 * @var bool
 	 */
 	'redis_lock' => env("SNOWFLAKE_REDIS_LOCK", false),
 
 	/**
-	 * redis配置信息
+	 * Redis配置连接名称
 	 * @var array
 	 */
-	'redis_config' => array(
-		'host'     => env('REDIS_HOST', '127.0.0.1'),
-		'password' => env('REDIS_PASSWORD', null),
-		'port'     => env('REDIS_PORT', 6379),
-		'database' => env('REDIS_DB', 0),
-    )
+	'redis_connection' => "default"
 );

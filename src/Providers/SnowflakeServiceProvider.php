@@ -3,6 +3,7 @@
 namespace Ericliucn\LaravelSnowflake\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Ericliucn\LaravelSnowflake\Snowflake;
 
 class SnowflakeServiceProvider extends ServiceProvider
 {

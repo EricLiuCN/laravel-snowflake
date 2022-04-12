@@ -12,52 +12,7 @@ use Ericliucn\LaravelSnowflake\Server\RedisCountServer;
  */
 class Snowflake
 {
-    /*const TIMESTAMP_BITS      = 32;
-    const DATA_CENTER_BITS    = 4;
-    const MACHINE_ID_BITS     = 4;
-    const SEQUENCE_BITS       = 13;*/
-
-    private static $config = array(
-        /**
-         * 初始时间戳
-         * @var number
-         */
-        'start_time' => 0,
-        /**
-         * 数据中心ID 【0~31】
-         * @var number
-         */
-        'dataCenter_id' => 0,
-
-        /**
-         * 机器ID 【0~31】
-         * @var number
-         */
-        'machine_id' => 0,
-
-        /**
-         * 是否短ID 【兼容js】
-         * @var number
-         */
-        'short_id' => false,
-
-        /**
-         * 是否启用redis锁 false使用 文件锁
-         * @var bool
-         */
-        'redis_lock' => false,
-
-        /**
-         * redis配置信息
-         * @var array
-         */
-        'redis_config' => array(
-            'host'     => '127.0.0.1',
-            'port'     => '6379',
-            'database' => '0',
-            'password' => '',
-        )
-    );
+    private static $config;
 
     private static $timestamp_bits;
     private static $data_center_bits;
@@ -84,12 +39,19 @@ class Snowflake
     public function __construct()
     {
         $config = config('snowflake.config', array());
-        self::$config = array_merge(self::$config, $config);
+        self::$config = array_merge([
+            'start_time'       => strtotime('2022-04-12 00:00:00') * 1000,
+            'dataCenter_id'    => 0,
+            'machine_id'       => 0,
+            'short_id'         => false,
+            'redis_lock'       => false,
+            'redis_connection' => "default"
+        ], $config);
         if(self::$config['short_id']){
             self::$timestamp_bits   = 32;
-            self::$data_center_bits = 4;
-            self::$machine_id_bits  = 4;
-            self::$sequence_bits    = 13;
+            self::$data_center_bits = 5;
+            self::$machine_id_bits  = 5;
+            self::$sequence_bits    = 9;
             self::$startTime        = self::$config['start_time'];
         }else{
             self::$timestamp_bits   = 41;
@@ -117,7 +79,8 @@ class Snowflake
         self::$maxDataCenterId     = -1 ^ (-1 << self::$data_center_bits);
 
         if (isset(self::$config['redis_lock']) && self::$config['redis_lock']) {
-            $redisConfig = self::$config['redis_config'];
+            $redis_connection = self::$config['redis_connection'];
+            $redisConfig = config("database.redis.{$redis_connection}");
             self::$countService = new RedisCountServer($redisConfig);
         } else {
             self::$countService = new FileCountServer();
@@ -181,8 +144,6 @@ class Snowflake
                 'sequence'     => bindec($sequence),
             ];
         }
-
-
     }
 
     // 取当前时间
